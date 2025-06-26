@@ -79,9 +79,9 @@ def get_guessed_word(secret_word, letters_guessed):
 
     for letter in secret_word:
         if letter in letters_guessed:
-            guessed_word = guessed_word + letter + " "
+            guessed_word = guessed_word + letter 
         else:
-            guessed_word = guessed_word + " _"
+            guessed_word = guessed_word + " _ "
     return guessed_word
 
 
@@ -135,7 +135,7 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    
+    runs = 0
     
     guesses_left = 6
     warnings = 3
@@ -152,7 +152,7 @@ def hangman(secret_word):
     print(have, warnings, "warnings left.")
     
     while guesses_left > 0 and not is_word_guessed(secret_word, letters_guessed):
-        
+        runs += 1
         print()
         print("-" * 13, "-" * 13, "-" * 13) 
         print()
@@ -205,33 +205,34 @@ def hangman(secret_word):
             print()
             print(message, get_guessed_word(secret_word, letters_guessed))
             print()
-            yes_or_no = input("Do you have a final guess? (Y)es or (N)o: ")
-           # yes_or_no.lower()
-            print()
-            if yes_or_no == "y" :
+            if runs > 1 and guesses_left > 0:
+                yes_or_no = input("Would you like to guess the word? (Y)es or (N)o: ")
+                yes_or_no = yes_or_no.lower()
                 print()
-                final_guess = input("Please input your final guess if you have one: ")
-                print()
-                if final_guess == secret_word:
-                   break
-                else: 
-                    print()
-                    print("That was not my word!")
-                    print()
-                    print("You have lost the game and ran out of guesses.")
-                    print()
-                    print(f"The word was {BOLD}{secret_word.upper()}{END}.")
-                    
-                    print()
-                    quit()
-        
+                if yes_or_no == "y" :
+                   print()
+                   final_guess = input("Please input your final guess if you have one: ")
+                   print()
+                   if final_guess == secret_word:
+                       break
+                   else: 
+                       print()
+                       print(f"{BOLD}{final_guess.upper()}{END} was not my word!")
+                       print()
+                       print("You have lost the game and ran out of guesses.")
+                       print()
+                       print(f"The word was {BOLD}{secret_word.upper()}{END}.")
+                       print()
+                       quit()
+         
       
-    if is_word_guessed(secret_word, letters_guessed):
+    if is_word_guessed(secret_word, letters_guessed) or final_guess == secret_word:
       print()
       print("Congratulations, you won!")
       score =  get_unique_letters(secret_word) * guesses_left
       print()
       print("Your total score for this game is:", score)
+      print()
     else:
       print()
       print(f"Sorry, you ran out of guesses. The word was {BOLD}{secret_word.upper()}{END}.")
@@ -318,7 +319,8 @@ def hangman_with_hints(secret_word):
 
 
 if __name__ == "__main__":
-    secret_word = random.choice(wordlist)
+    #secret_word = random.choice(wordlist)
+    secret_word = "house"
     hangman(secret_word)
 
 
